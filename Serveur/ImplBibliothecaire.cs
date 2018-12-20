@@ -54,32 +54,28 @@ namespace Serveur
         {
             try
             {
-                string commande = String.Format("select * into compte where user = '"+compte.getUsername()+"'");
+                string commande = String.Format("select * from compte where user = '"+compte.getUsername()+"'");
                 mySqlCommand.Connection = MySqlConnection;
                 mySqlCommand.CommandText = commande;
                 MySqlConnection.Open();
 
                 MySqlDataReader mySqlDataReader = mySqlCommand.ExecuteReader();
-                if (mySqlDataReader.Read())
+                while(mySqlDataReader.Read())
                 {
-                    if (compte.getUsername() == mySqlDataReader["user"] && compte.getMot_de_passe() == mySqlDataReader["passe"])
+                    if (compte.getUsername() == mySqlDataReader["user"].ToString() && compte.getMot_de_passe() == mySqlDataReader["passe"].ToString())
                     {
                         return true;
                     }
-                    else
-                    {
-                        return false;
-                    }
-                    
+                                       
                 }
-                else
-                {
-                    return false;
-                }
+                return false;
+               
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 return false;
+                
             }
             Console.ReadLine();
             MySqlConnection.Close();
